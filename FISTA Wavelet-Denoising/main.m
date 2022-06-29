@@ -1,4 +1,4 @@
-
+  %load image
   img = double(rgb2gray(imread('data/hibiscus.bmp')))/255.0; 
   [dim1, dim2] = size(img);
 
@@ -8,14 +8,15 @@
   sigma = .05;      %noise level
   %lambda = .05;    %denoising parameter
   nlambda = 20;
+
+  %Arrays for testing different values of lambda
   F = (1:nlambda)/(100*sigma*nlambda);
   G = zeros(nlambda,1);
 
   %show original image
-%   figure; imshow(img); 
-%   imshow(img); title('input')
-%   pause
-%   imwrite(img,'original2.bmp');
+  figure; imshow(img); 
+  imshow(img); title('input')
+  pause
     
   %add noise
   imgn = img + randn(dim1,dim2)*sigma; figure; imshow(imgn);
@@ -23,7 +24,6 @@
   pause
   
   %perform wavelet denoising for different values of lambda
-
   for k = 1:nlambda
     imgdn = wavelet_soft_thresholding(imgn, F(k), filter, L);
     G(k) = snr(img,imgdn-img);
@@ -31,8 +31,8 @@
   [M,I] = max(G);
   lambda = F(I);
   
-  
-figure; plot(F,G); xlabel('\lambda');ylabel('SNR');title('Wavelet denoising');
+  %show SNR for different values of lambda
+  figure; plot(F,G); xlabel('\lambda');ylabel('SNR');title('Wavelet denoising');
   pause
 
   %show image with highest SNR
